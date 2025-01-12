@@ -82,7 +82,7 @@ const LiquidityAnalysis: React.FC = () => {
                             <CardContent>
                                 <Typography variant="h6">Total</Typography>
                                 <Typography variant="body1" color="textSecondary">
-                                    R$ {formatCurrency(data.totalDespesaSuperflua)}
+                                    {formatCurrency(data.totalDespesaSuperflua)}
                                 </Typography>
                             </CardContent>
                         </Card>
