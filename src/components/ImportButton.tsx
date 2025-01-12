@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Button, Box, Snackbar, Alert } from "@mui/material";
 import api from "../services/api";
+import SnackbarNotification from "./SnackbarNotification";
 
 const ImportButton: React.FC<{ onImport: () => void }> = ({ onImport }) => {
-    const [openSnackbar, setOpenSnackbar] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (!e.target.files?.[0]) return;
@@ -23,11 +24,7 @@ const ImportButton: React.FC<{ onImport: () => void }> = ({ onImport }) => {
             setSnackbarMessage(error.response.data.message ?? "Erro ao importar arquivo. Tente novamente.");
             setSnackbarSeverity("error");
         }
-        setOpenSnackbar(true);
-    };
-
-    const handleCloseSnackbar = () => {
-        setOpenSnackbar(false);
+        setSnackbarOpen(true);
     };
 
     return (
@@ -44,6 +41,12 @@ const ImportButton: React.FC<{ onImport: () => void }> = ({ onImport }) => {
                     onChange={handleFileUpload}
                 />
             </Button>
+            <SnackbarNotification
+                open={snackbarOpen}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+                onClose={() => setSnackbarOpen(false)}
+            />
         </Box>
     );
 };
