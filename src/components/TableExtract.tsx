@@ -68,7 +68,7 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                                 value={row.original.categoria_id || ""}
                                 onChange={(e) => handleChange(id, "categoria_id", Number(e.target.value))}
                                 renderValue={(selected) => renderSelected(selected, categoriaOptions)}
-                                style={{ backgroundColor: row.original.categoria?.cor || "#FFFFFF" }}
+                                style={{ backgroundColor: row.original.categoria?.cor || "red" }}
                             >
                                 {categoriaOptions.map((categoria) => (
                                     <MenuItem key={categoria.id} value={categoria.id} >
@@ -92,7 +92,7 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                                 value={row.original.tipo_id || ""}
                                 onChange={(e) => handleChange(id, "tipo_id", Number(e.target.value))}
                                 renderValue={(selected) => renderSelected(selected, tipoOptions)}
-                                style={{ backgroundColor: row.original.tipo?.cor || "#FFFFFF" }}
+                                style={{ backgroundColor: row.original.tipo?.cor || "red" }}
                             >
                                 {tipoOptions.map((tipo) => (
                                     <MenuItem key={tipo.id} value={tipo.id}>
