@@ -4,6 +4,7 @@ import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Selec
 import api from "../services/api";
 import SnackbarNotification from "./SnackbarNotification"; // Importando o componente SnackbarNotification
 import { formatCurrency } from "../utils/formatCurrency";
+import moment from "moment";
 
 interface Transaction {
     id: number;
@@ -58,7 +59,7 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                 Header: "Data",
                 accessor: "data",
                 Cell: ({ value }: any) => {
-                    const formattedDate = new Date(value).toLocaleDateString('pt-BR');
+                    const formattedDate = moment(value).add(3, "hour").utc(true).format("DD/MM/YYYY");
                     return <span>{formattedDate}</span>; // Retorna um ReactElement
                 },
             },

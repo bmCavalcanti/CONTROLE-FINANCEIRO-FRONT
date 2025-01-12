@@ -7,7 +7,7 @@ import { formatCurrency } from "./utils/formatCurrency";
 
 const FinancialForecast: React.FC = () => {
     const [forecastData, setForecastData] = useState<any>(null);
-    const [loading, setLoading] = useState<boolean>(true);
+    const [loading, setLoading] = useState<boolean>(false);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
@@ -27,10 +27,6 @@ const FinancialForecast: React.FC = () => {
             setSnackbarOpen(true)
         }
     };
-
-    useEffect(() => {
-        fetchForecast(); // Faz a requisição para obter os dados de previsão financeira
-    }, []);
 
     if (loading) {
         return (
@@ -53,17 +49,17 @@ const FinancialForecast: React.FC = () => {
                 <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={3} sx={{ marginTop: 4 }}>
                     <Box flex={1}>
                         <Typography variant="h6">Saldo Atual</Typography>
-                        <Typography variant="body1">{formatCurrency(forecastData.saldoAtual)}</Typography>
+                        <Typography variant="body1">{formatCurrency(forecastData?.saldoAtual)}</Typography>
                     </Box>
                     <Box flex={1}>
                         <Typography variant="h6">Saldo Futuro Estimado (Próximos 3 Meses)</Typography>
-                        <Typography variant="body1">{formatCurrency(forecastData.saldoFuturoEstimado)}</Typography>
+                        <Typography variant="body1">{formatCurrency(forecastData?.saldoFuturoEstimado)}</Typography>
                     </Box>
                 </Box>
                 <Box mt={3}>
                     <Typography variant="h6">Gastos Superfluos</Typography>
                     <Box>
-                        {forecastData.gastosSuperfluos.map(([categoria, valor]: [string, number]) => (
+                        {forecastData?.gastosSuperfluos.map(([categoria, valor]: [string, number]) => (
                             <Typography key={categoria} variant="body1">
                                 {categoria}: {formatCurrency(valor)}
                             </Typography>
@@ -73,15 +69,15 @@ const FinancialForecast: React.FC = () => {
                 <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={3} mt={3}>
                     <Box flex={1}>
                         <Typography variant="h6">Total Despesa Fixa</Typography>
-                        <Typography variant="body1">{formatCurrency(forecastData.totalDespesaFixa)}</Typography>
+                        <Typography variant="body1">{formatCurrency(forecastData?.totalDespesaFixa)}</Typography>
                     </Box>
                     <Box flex={1}>
                         <Typography variant="h6">Total Despesa Variável</Typography>
-                        <Typography variant="body1">{formatCurrency(forecastData.totalDespesaVariavel)}</Typography>
+                        <Typography variant="body1">{formatCurrency(forecastData?.totalDespesaVariavel)}</Typography>
                     </Box>
                     <Box flex={1}>
                         <Typography variant="h6">Total Despesa Superflua</Typography>
-                        <Typography variant="body1">{formatCurrency(forecastData.totalDespesaSuperflua)}</Typography>
+                        <Typography variant="body1">{formatCurrency(forecastData?.totalDespesaSuperflua)}</Typography>
                     </Box>
                 </Box>
             </Paper>

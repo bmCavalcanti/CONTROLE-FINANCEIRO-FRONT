@@ -4,6 +4,7 @@ import api from "./services/api";
 import LiquidityChart from "./components/LiquidityChart";
 import Filters from "./components/Filters";
 import SnackbarNotification from "./components/SnackbarNotification";
+import { formatCurrency } from "./utils/formatCurrency";
 
 const LiquidityAnalysis: React.FC = () => {
     const [data, setData] = useState({
@@ -81,7 +82,7 @@ const LiquidityAnalysis: React.FC = () => {
                             <CardContent>
                                 <Typography variant="h6">Total</Typography>
                                 <Typography variant="body1" color="textSecondary">
-                                    R$ {data.totalDespesaSuperflua.toFixed(2)}
+                                    R$ {formatCurrency(data.totalDespesaSuperflua)}
                                 </Typography>
                             </CardContent>
                         </Card>
@@ -98,7 +99,7 @@ const LiquidityAnalysis: React.FC = () => {
                                 <CardContent>
                                     <Typography variant="h6">{categoria}</Typography>
                                     <Typography variant="body1" color="textSecondary">
-                                        R$ {parseFloat(valor).toFixed(2)}
+                                        {formatCurrency(valor)}
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -108,7 +109,7 @@ const LiquidityAnalysis: React.FC = () => {
             </Paper>
             <Paper sx={{ padding: 4, marginBottom: 4, boxShadow: 3 }}>
                 <Typography variant="h5" gutterBottom>
-                    Liquidez Atual: R$ {data.liquidez.toFixed(2)}
+                    Liquidez Atual: {formatCurrency(data.liquidez)}
                 </Typography>
                 <LiquidityChart evolucao={data.evolucao} />
             </Paper>
