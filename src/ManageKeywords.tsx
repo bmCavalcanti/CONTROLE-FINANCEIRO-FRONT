@@ -4,7 +4,7 @@ import api from "./services/api";
 import TableKeywords from "./components/TableKeywords";
 import SnackbarNotification from "./components/SnackbarNotification";
 
-const PalavrasChave: React.FC = () => {
+const ManageKeywords: React.FC = () => {
     const [data, setData] = useState([]);
     const [categoriaOptions, setCategoriaOptions] = useState<{ id: number; nome: string, cor: string }[]>([]);
     const [tipoOptions, setTipoOptions] = useState<{ id: number; nome: string; cor: string }[]>([]);
@@ -14,6 +14,8 @@ const PalavrasChave: React.FC = () => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+    const [openDeleteConfirm, setOpenDeleteConfirm] = useState(false); // Estado para controlar o modal de confirmação de exclusão
+    const [deleteId, setDeleteId] = useState<number | null>(null); // ID da palavra-chave a ser excluída
 
     const fetchData = async (filters = {}) => {
         try {
@@ -72,6 +74,36 @@ const PalavrasChave: React.FC = () => {
         }
     };
 
+    const handleDelete = async () => {
+        if (deleteId !== null) {
+            try {
+                const response = await api.delete(`/palavra_chave/${deleteId}`);
+                if (response.data.status) {
+                    fetchData(); // Recarrega os dados após a exclusão
+                    setSnackbarMessage(response.data.message ?? "Palavra-chave excluída com sucesso!");
+                    setSnackbarSeverity("success");
+                }
+            } catch (error: any) {
+                setSnackbarMessage(error.response.data.message ?? "Erro ao tentar excluir!");
+                setSnackbarSeverity("error");
+                console.error("Erro ao excluir palavra-chave:", error);
+            } finally {
+                setSnackbarOpen(true);
+                setOpenDeleteConfirm(false); // Fecha o modal de confirmação
+            }
+        }
+    };
+
+    const handleOpenDeleteConfirm = (id: number) => {
+        setDeleteId(id);
+        setOpenDeleteConfirm(true); // Abre o modal de confirmação
+    };
+
+    const handleCloseDeleteConfirm = () => {
+        setOpenDeleteConfirm(false); // Fecha o modal de confirmação
+        setDeleteId(null);
+    };
+
     const handleOpenModal = (palavra?: any) => {
         if (palavra) {
             setModalData(palavra); // Preenche os dados do modal para edição
@@ -92,7 +124,7 @@ const PalavrasChave: React.FC = () => {
                     <CircularProgress />
                 </Paper>
             </Container>
-        )
+        );
     }
 
     return (
@@ -104,7 +136,14 @@ const PalavrasChave: React.FC = () => {
                 <Button variant="contained" color="success" onClick={() => handleOpenModal()}>Adicionar Palavra-chave</Button>
             </Paper>
             <Paper sx={{ padding: 4, boxShadow: 3 }}>
-                <TableKeywords data={data} fetchData={fetchData} categoriaOptions={categoriaOptions} tipoOptions={tipoOptions} onEdit={handleOpenModal} />
+                <TableKeywords
+                    data={data}
+                    fetchData={fetchData}
+                    categoriaOptions={categoriaOptions}
+                    tipoOptions={tipoOptions}
+                    onEdit={handleOpenModal}
+                    onDelete={handleOpenDeleteConfirm} // Passando a função de confirmação de exclusão para a tabela
+                />
             </Paper>
 
             {/* Modal de Inserção/Atualização */}
@@ -161,6 +200,19 @@ const PalavrasChave: React.FC = () => {
                     <Button onClick={handleSave} color="success">{modalData.id ? "Salvar" : "Adicionar"}</Button>
                 </DialogActions>
             </Dialog>
+
+            {/* Modal de Confirmação de Exclusão */}
+            <Dialog open={openDeleteConfirm} onClose={handleCloseDeleteConfirm}>
+                <DialogTitle>Confirmar Exclusão</DialogTitle>
+                <DialogContent>
+                    <Typography>Tem certeza de que deseja excluir esta palavra-chave?</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDeleteConfirm} color="error">Cancelar</Button>
+                    <Button onClick={handleDelete} color="success">Confirmar</Button>
+                </DialogActions>
+            </Dialog>
+
             <SnackbarNotification
                 open={snackbarOpen}
                 message={snackbarMessage}
@@ -171,4 +223,4 @@ const PalavrasChave: React.FC = () => {
     );
 };
 
-export default PalavrasChave;
+export default ManageKeywords;

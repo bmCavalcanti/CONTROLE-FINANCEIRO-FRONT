@@ -1,6 +1,6 @@
 import React from "react";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Button, Badge } from "@mui/material";
-import { Edit } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 
 interface Item {
     id: number;
@@ -21,11 +21,12 @@ interface TableKeywordsProps {
     data: Keywords[];
     fetchData: (filters?: any) => void;
     onEdit: (filters?: any) => void;
+    onDelete: (filters?: any) => void;
     categoriaOptions: { id: number; nome: string, cor: string }[];
     tipoOptions: { id: number; nome: string; cor: string }[];
 }
 
-const TableKeywords: React.FC<TableKeywordsProps> = ({ data, fetchData, categoriaOptions, tipoOptions, onEdit  }) => {
+const TableKeywords: React.FC<TableKeywordsProps> = ({ data, fetchData, categoriaOptions, tipoOptions, onEdit, onDelete  }) => {
 
     return (
         <TableContainer>
@@ -69,6 +70,7 @@ const TableKeywords: React.FC<TableKeywordsProps> = ({ data, fetchData, categori
 
                             <TableCell>
                                 <Button onClick={() => onEdit(palavra)} color="success"><Edit /></Button>
+                                <Button onClick={() => onDelete(palavra.id)} color="error"><Delete /></Button>
                             </TableCell>
                         </TableRow>
                     ))}
