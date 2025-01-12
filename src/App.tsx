@@ -1,73 +1,53 @@
-import React, { useEffect, useState } from "react";
-import { Container, Typography, Paper, CircularProgress } from "@mui/material";
-import TableExtract from "./components/TableExtract";
-import Filters from "./components/Filters";
-import ImportButton from "./components/ImportButton";
-import api from "./services/api";
+import React from "react";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { AppBar, Toolbar, Button, Typography, Container } from "@mui/material";
+import Analysis from "./Analysis";
+import Transactions from "./Transactions";
+import LiquidityAnalysis from "./LiquidityAnalysis";
 
 const App: React.FC = () => {
-    const [data, setData] = useState([]);
-    const [categoriaOptions, setCategoriaOptions] = useState<{ id: number; nome: string, cor: string }[]>([]);
-    const [tipoOptions, setTipoOptions] = useState<{ id: number; nome: string; cor: string }[]>([]);
-    const [loadingInfo, setLoadingInfo] = useState(true);
-
-    const fetchData = async (filters = {}) => {
-        try {
-            const response = await api.get("/extrato/list", { params: filters });
-            setData(response.data.data || []);
-        } catch (error) {
-            console.error("Erro ao buscar dados:", error);
-        }
-    };
-
-    const fetchCategorias = async () => {
-        try {
-            const response = await api.get("/extrato_categoria/list");
-            setCategoriaOptions(response.data.data || []);
-        } catch (error) {
-            console.error("Erro ao buscar categorias:", error);
-        }
-    };
-
-    const fetchTipos = async () => {
-        try {
-            const response = await api.get("/extrato_tipo/list");
-            setTipoOptions(response.data.data || []);
-        } catch (error) {
-            console.error("Erro ao buscar tipos:", error);
-        }
-    };
-
-    useEffect(() => {
-        const fetchDataAsync = async () => {
-            await Promise.all([fetchCategorias(), fetchTipos()]); // Faz as requisições em paralelo
-            setLoadingInfo(false);
-        };
-        fetchDataAsync();
-    }, []);
-
-    if (loadingInfo) {
-        return (
-            <Container maxWidth="lg" sx={{ paddingTop: 4 }}>
-                <Paper sx={{ padding: 4, marginBottom: 4, boxShadow: 3 }}>
-                    <CircularProgress />
-                </Paper>
-            </Container>
-        )
-    }
-
     return (
-        <Container maxWidth="lg" sx={{ paddingTop: 4 }}>
-            <Paper sx={{ padding: 4, marginBottom: 4, boxShadow: 3 }}>
-                <Typography variant="h4" gutterBottom sx={{ marginBottom: 4 }}>
-                    Gestão de Transações
+        <Router>
+            <Navbar />
+            <Routes>
+                <Route path="/" element={<WelcomePage />} />
+                <Route path="/transacoes" element={<Transactions />} />
+                <Route path="/analise" element={<Analysis />} />
+                <Route path="/analise-liquidez" element={<LiquidityAnalysis />} />
+            </Routes>
+        </Router>
+    );
+};
+
+const Navbar: React.FC = () => {
+    return (
+        <AppBar position="sticky">
+            <Toolbar>
+                <Typography variant="h6" sx={{ flexGrow: 1 }}>
+                    CONTROLE FINANCEIRO
                 </Typography>
-                <Filters onFilter={fetchData} categoriaOptions={categoriaOptions} tipoOptions={tipoOptions} />
-                <ImportButton onImport={fetchData} />
-            </Paper>
-            <Paper sx={{ padding: 4, boxShadow: 3 }}>
-                <TableExtract data={data} fetchData={fetchData} categoriaOptions={categoriaOptions} tipoOptions={tipoOptions} />
-            </Paper>
+                <Button color="inherit" component={Link} to="/">
+                    Home
+                </Button>
+                <Button color="inherit" component={Link} to="/transacoes">
+                    Transações
+                </Button>
+                <Button color="inherit" component={Link} to="/analise">
+                    Análise de extrato
+                </Button>
+                <Button color="inherit" component={Link} to="/analise-liquidez">
+                    Análise de Liquidez
+                </Button>
+            </Toolbar>
+        </AppBar>
+    );
+};
+
+const WelcomePage: React.FC = () => {
+    return (
+        <Container sx={{ textAlign: "center", marginTop: 4 }}>
+            <h1>Bem-vindo!</h1>
+            <p>Escolha uma das opções no menu para navegar.</p>
         </Container>
     );
 };

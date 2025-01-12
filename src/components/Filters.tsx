@@ -4,8 +4,8 @@ import moment from "moment";
 
 interface FiltersProps {
     onFilter: (filters: { data_inicio?: string; data_fim?: string; categorias?: number[]; tipos?: number[] }) => void;
-    categoriaOptions: { id: number; nome: string }[];
-    tipoOptions: { id: number; nome: string }[];
+    categoriaOptions?: { id: number; nome: string }[];
+    tipoOptions?: { id: number; nome: string }[];
 }
 
 const Filters: React.FC<FiltersProps> = ({ onFilter, categoriaOptions, tipoOptions }) => {
@@ -56,42 +56,50 @@ const Filters: React.FC<FiltersProps> = ({ onFilter, categoriaOptions, tipoOptio
                     fullWidth
                 />
             </Box>
-            <Box sx={{ flex: 1 }}>
-                <FormControl variant="outlined" fullWidth size="small">
-                    <InputLabel>Categoria</InputLabel>
-                    <Select
-                        multiple
-                        value={categorias}
-                        onChange={(e) => handleSelectChange(e, setCategorias)}
-                        label="Categoria"
-                        renderValue={(selected) => renderSelected(selected as number[], categoriaOptions)}
-                    >
-                        {categoriaOptions.map((categoria) => (
-                            <MenuItem key={categoria.id} value={categoria.id}>
-                                {categoria.nome}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Box>
-            <Box sx={{ flex: 1 }}>
-                <FormControl variant="outlined" fullWidth size="small">
-                    <InputLabel>Tipo</InputLabel>
-                    <Select
-                        multiple
-                        value={tipos}
-                        onChange={(e) => handleSelectChange(e, setTipos)}
-                        label="Tipo"
-                        renderValue={(selected) => renderSelected(selected as number[], tipoOptions)}
-                    >
-                        {tipoOptions.map((tipo) => (
-                            <MenuItem key={tipo.id} value={tipo.id}>
-                                {tipo.nome}
-                            </MenuItem>
-                        ))}
-                    </Select>
-                </FormControl>
-            </Box>
+            {
+                categoriaOptions ?
+                <Box sx={{ flex: 1 }}>
+                    <FormControl variant="outlined" fullWidth size="small">
+                        <InputLabel>Categoria</InputLabel>
+                        <Select
+                            multiple
+                            value={categorias}
+                            onChange={(e) => handleSelectChange(e, setCategorias)}
+                            label="Categoria"
+                            renderValue={(selected) => renderSelected(selected as number[], categoriaOptions)}
+                        >
+                            {categoriaOptions.map((categoria) => (
+                                <MenuItem key={categoria.id} value={categoria.id}>
+                                    {categoria.nome}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                </Box>
+                : <></>
+            }
+            {
+                tipoOptions ?
+                    <Box sx={{ flex: 1 }}>
+                        <FormControl variant="outlined" fullWidth size="small">
+                            <InputLabel>Tipo</InputLabel>
+                            <Select
+                                multiple
+                                value={tipos}
+                                onChange={(e) => handleSelectChange(e, setTipos)}
+                                label="Tipo"
+                                renderValue={(selected) => renderSelected(selected as number[], tipoOptions)}
+                            >
+                                {tipoOptions.map((tipo) => (
+                                    <MenuItem key={tipo.id} value={tipo.id}>
+                                        {tipo.nome}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Box>
+                : <></>
+            }
             <Box sx={{ flex: 1 }}>
                 <Button variant="contained" color="primary" onClick={applyFilters}>
                     Filtrar
