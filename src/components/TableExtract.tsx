@@ -3,6 +3,7 @@ import { useTable, Column } from "react-table";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Select, MenuItem, FormControl, InputLabel, CircularProgress } from "@mui/material";
 import api from "../services/api";
 import SnackbarNotification from "./SnackbarNotification"; // Importando o componente SnackbarNotification
+import { formatCurrency } from "../utils/formatCurrency";
 
 interface Transaction {
     id: number;
@@ -61,7 +62,14 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                     return <span>{formattedDate}</span>; // Retorna um ReactElement
                 },
             },
-            { Header: "Valor", accessor: "valor" },
+            {
+                Header: "Valor",
+                accessor: "valor",
+                Cell: ({ value }: any) => {
+                    const formattedValue = formatCurrency(value);
+                    return <span>{formattedValue}</span>; // Retorna um ReactElement
+                },
+            },
             { Header: "Descrição", accessor: "descricao" },
             {
                 Header: "Categoria",
@@ -70,7 +78,7 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                     const { id } = row.original;
                     return (
                         <FormControl fullWidth>
-                            <InputLabel>Categoria</InputLabel>
+                            {/* <InputLabel>Categoria</InputLabel> */}
                             <Select
                                 value={row.original.categoria_id || ""}
                                 onChange={(e) => handleChange(id, "categoria_id", Number(e.target.value))}
@@ -94,7 +102,7 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                     const { id } = row.original;
                     return (
                         <FormControl fullWidth>
-                            <InputLabel>Tipo</InputLabel>
+                            {/* <InputLabel>Tipo</InputLabel> */}
                             <Select
                                 value={row.original.tipo_id || ""}
                                 onChange={(e) => handleChange(id, "tipo_id", Number(e.target.value))}

@@ -4,6 +4,7 @@ import { AppBar, Toolbar, Button, Typography, Container } from "@mui/material";
 import Analysis from "./Analysis";
 import Transactions from "./Transactions";
 import LiquidityAnalysis from "./LiquidityAnalysis";
+import FinancialForecast from "./FinancialForecast";
 
 const App: React.FC = () => {
     return (
@@ -14,6 +15,7 @@ const App: React.FC = () => {
                 <Route path="/transacoes" element={<Transactions />} />
                 <Route path="/analise" element={<Analysis />} />
                 <Route path="/analise-liquidez" element={<LiquidityAnalysis />} />
+                <Route path="/previsao-financeira" element={<FinancialForecast />} />
             </Routes>
         </Router>
     );
@@ -37,6 +39,9 @@ const Navbar: React.FC = () => {
                 </Button>
                 <Button color="inherit" component={Link} to="/analise-liquidez">
                     Análise de Liquidez
+                </Button>
+                <Button color="inherit" component={Link} to="/previsao-financeira">
+                    Previsão Financeira
                 </Button>
             </Toolbar>
         </AppBar>

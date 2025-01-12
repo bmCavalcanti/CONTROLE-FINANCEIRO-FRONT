@@ -15,9 +15,9 @@ const SnackbarNotification: React.FC<SnackbarNotificationProps> = ({
     onClose,
 }) => {
     return (
-        <Snackbar open={open} autoHideDuration={6000} onClose={onClose} anchorOrigin={{
-            vertical: "top", // Posição vertical no topo
-            horizontal: "right", // Posição horizontal à direita
+        <Snackbar open={open} autoHideDuration={4000} onClose={onClose} anchorOrigin={{
+            vertical: "top",
+            horizontal: "center",
         }}>
             <Alert onClose={onClose} severity={severity}>
                 {message}
