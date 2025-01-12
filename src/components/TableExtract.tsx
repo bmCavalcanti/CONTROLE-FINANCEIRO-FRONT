@@ -53,7 +53,14 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
 
     const columns: Column<Transaction>[] = React.useMemo(
         () => [
-            { Header: "Data", accessor: "data" },
+            {
+                Header: "Data",
+                accessor: "data",
+                Cell: ({ value }: any) => {
+                    const formattedDate = new Date(value).toLocaleDateString('pt-BR');
+                    return <span>{formattedDate}</span>; // Retorna um ReactElement
+                },
+            },
             { Header: "Valor", accessor: "valor" },
             { Header: "Descrição", accessor: "descricao" },
             {

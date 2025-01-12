@@ -9,7 +9,7 @@ interface FiltersProps {
 }
 
 const Filters: React.FC<FiltersProps> = ({ onFilter, categoriaOptions, tipoOptions }) => {
-    const [dataInicio, setDataInicio] = useState(moment().startOf('month').format('YYYY-MM-DD'));
+    const [dataInicio, setDataInicio] = useState(moment().add(-3, "month").startOf('month').format('YYYY-MM-DD'));
     const [dataFim, setDataFim] = useState(moment().endOf('month').format('YYYY-MM-DD'));
     const [categorias, setCategorias] = useState<number[]>([]);
     const [tipos, setTipos] = useState<number[]>([]);
