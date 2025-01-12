@@ -35,7 +35,7 @@ const ImportButton: React.FC<{ onImport: () => void }> = ({ onImport }) => {
             <Button
                 variant="contained"
                 component="label"
-                color="primary"
+                color="success"
             >
                 Importar Arquivo
                 <input

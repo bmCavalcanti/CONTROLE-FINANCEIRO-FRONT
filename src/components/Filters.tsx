@@ -101,7 +101,7 @@ const Filters: React.FC<FiltersProps> = ({ onFilter, categoriaOptions, tipoOptio
                 : <></>
             }
             <Box sx={{ flex: 1 }}>
-                <Button variant="contained" color="primary" onClick={applyFilters}>
+                <Button variant="contained" color="success" onClick={applyFilters}>
                     Filtrar
                 </Button>
             </Box>

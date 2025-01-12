@@ -21,7 +21,7 @@ const App: React.FC = () => {
 
 const Navbar: React.FC = () => {
     return (
-        <AppBar position="sticky">
+        <AppBar position="sticky" color="success">
             <Toolbar>
                 <Typography variant="h6" sx={{ flexGrow: 1 }}>
                     CONTROLE FINANCEIRO
