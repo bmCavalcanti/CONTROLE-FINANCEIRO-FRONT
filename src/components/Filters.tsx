@@ -64,8 +64,6 @@ const Filters: React.FC<FiltersProps> = ({ onFilter, categoriaOptions, tipoOptio
 
         setDataInicio(startDate.format('YYYY-MM-DD'));
         setDataFim(endDate.format('YYYY-MM-DD'));
-
-        applyFilters();
     };
 
     return (
