@@ -5,6 +5,7 @@ import Analysis from "./Analysis";
 import Transactions from "./Transactions";
 import LiquidityAnalysis from "./LiquidityAnalysis";
 import FinancialForecast from "./FinancialForecast";
+import ManageKeywords from "./ManageKeywords";
 
 const App: React.FC = () => {
     return (
@@ -12,6 +13,7 @@ const App: React.FC = () => {
             <Navbar />
             <Routes>
                 <Route path="/" element={<WelcomePage />} />
+                <Route path="/palavras-chave" element={<ManageKeywords />} />
                 <Route path="/transacoes" element={<Transactions />} />
                 <Route path="/analise" element={<Analysis />} />
                 <Route path="/analise-liquidez" element={<LiquidityAnalysis />} />
@@ -30,6 +32,9 @@ const Navbar: React.FC = () => {
                 </Typography>
                 <Button color="inherit" component={Link} to="/">
                     Home
+                </Button>
+                <Button color="inherit" component={Link} to="/palavras-chave">
+                    Palavras Chave
                 </Button>
                 <Button color="inherit" component={Link} to="/transacoes">
                     Transações
