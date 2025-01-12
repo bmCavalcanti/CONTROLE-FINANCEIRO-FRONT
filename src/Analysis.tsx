@@ -4,6 +4,7 @@ import { Bar, Pie } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend } from "chart.js";
 import Filters from "./components/Filters";
 import api from "./services/api";
+import SnackbarNotification from "./components/SnackbarNotification";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, ArcElement, Tooltip, Legend);
 
@@ -30,6 +31,9 @@ const Analysis: React.FC = () => {
     const [categoriaOptions, setCategoriaOptions] = useState<CategoriaOption[]>([]);
     const [tipoOptions, setTipoOptions] = useState<TipoOption[]>([]);
     const [loading, setLoading] = useState(true);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
     const fetchData = async (filters = {}) => {
         try {
@@ -37,8 +41,14 @@ const Analysis: React.FC = () => {
 
             const response = await api.get("/extrato/list", { params: filters });
             setData(response.data.data || []);
-        } catch (error) {
-            console.error("Erro ao buscar dados:", error);
+            setSnackbarMessage(response.data.message ?? "Dados atualizados.");
+        } catch (error: any) {
+            console.error("Erro ao buscar:", error);
+            setSnackbarMessage(error.response.data.message ?? "Erro ao buscar dados. Tente novamente.");
+            setSnackbarSeverity("error");
+        } finally {
+            setLoading(false);
+            setSnackbarOpen(true);
         }
     };
 
@@ -223,6 +233,12 @@ const Analysis: React.FC = () => {
                     </Paper>
                 </Box>
             </Box>
+            <SnackbarNotification
+                open={snackbarOpen}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+                onClose={() => setSnackbarOpen(false)}
+            />
         </Container>
     );
 };

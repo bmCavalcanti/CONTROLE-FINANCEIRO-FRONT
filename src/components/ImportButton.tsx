@@ -17,7 +17,7 @@ const ImportButton: React.FC<{ onImport: () => void }> = ({ onImport }) => {
             const response = await api.post("/extrato/import", formData);
             onImport();
             setSnackbarMessage(response.data.message);
-            setSnackbarSeverity(response.data.status ? "success" : "error");
+            setSnackbarSeverity("success");
         } catch (error: any) {
             console.error("Erro ao importar arquivo:", error);
             setSnackbarMessage(error.response.data.message ?? "Erro ao importar arquivo. Tente novamente.");
@@ -44,24 +44,6 @@ const ImportButton: React.FC<{ onImport: () => void }> = ({ onImport }) => {
                     onChange={handleFileUpload}
                 />
             </Button>
-
-            <Snackbar
-                open={openSnackbar}
-                autoHideDuration={6000}
-                onClose={handleCloseSnackbar}
-                anchorOrigin={{
-                    vertical: "top", // Posição vertical no topo
-                    horizontal: "right", // Posição horizontal à direita
-                }}
-            >
-                <Alert
-                    onClose={handleCloseSnackbar}
-                    severity={snackbarSeverity}
-                    sx={{ width: "100%" }}
-                >
-                    {snackbarMessage}
-                </Alert>
-            </Snackbar>
         </Box>
     );
 };

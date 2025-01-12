@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Container, Typography, Paper, CircularProgress, CardContent, Box, Card } from "@mui/material";
 import api from "./services/api";
 import LiquidityChart from "./components/LiquidityChart";
 import Filters from "./components/Filters";
+import SnackbarNotification from "./components/SnackbarNotification";
 
 const LiquidityAnalysis: React.FC = () => {
     const [data, setData] = useState({
@@ -12,6 +13,9 @@ const LiquidityAnalysis: React.FC = () => {
         totalDespesaSuperflua: 0,
     });
     const [loading, setLoading] = useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+    const [snackbarMessage, setSnackbarMessage] = useState("");
+    const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
 
     const fetchLiquidityAnalysis = async (filters = {}) => {
         setLoading(true);
@@ -23,10 +27,16 @@ const LiquidityAnalysis: React.FC = () => {
                 gastosSuperfluos: [],
                 totalDespesaSuperflua: 0,
             });
-        } catch (error) {
-            console.error("Erro ao buscar análise de liquidez:", error);
+
+            setSnackbarMessage(response.data.message);
+            setSnackbarSeverity("success");
+        } catch (error: any) {
+            console.error("Erro ao buscar:", error);
+            setSnackbarMessage(error.response.data.message ?? "Erro ao buscar dados. Tente novamente.");
+            setSnackbarSeverity("error");
         } finally {
             setLoading(false);
+            setSnackbarOpen(true);
         }
     };
 
@@ -102,6 +112,13 @@ const LiquidityAnalysis: React.FC = () => {
                 </Typography>
                 <LiquidityChart evolucao={data.evolucao} />
             </Paper>
+
+            <SnackbarNotification
+                open={snackbarOpen}
+                message={snackbarMessage}
+                severity={snackbarSeverity}
+                onClose={() => setSnackbarOpen(false)}
+            />
         </Container>
     );
 };

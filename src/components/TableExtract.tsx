@@ -36,9 +36,9 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
             fetchData();
             setSnackbarMessage("Alteração salva com sucesso!");
             setSnackbarSeverity("success");
-        } catch (error) {
+        } catch (error: any) {
             console.error("Erro ao salvar alterações:", error);
-            setSnackbarMessage("Erro ao salvar alterações.");
+            setSnackbarMessage(error.response.data.message ?? "Erro ao salvar alterações. Tente novamente.");
             setSnackbarSeverity("error");
         } finally {
             setLoading(null);
