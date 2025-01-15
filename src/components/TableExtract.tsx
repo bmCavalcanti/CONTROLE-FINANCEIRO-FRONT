@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useTable, Column } from "react-table";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Select, MenuItem, FormControl, InputLabel, CircularProgress } from "@mui/material";
 import api from "../services/api";
-import SnackbarNotification from "./SnackbarNotification"; // Importando o componente SnackbarNotification
+import SnackbarNotification from "./SnackbarNotification";
 import { formatCurrency } from "../utils/formatCurrency";
 import moment from "moment";
 
@@ -17,13 +17,13 @@ interface Transaction {
 
 interface TableProps {
     data: Transaction[];
-    fetchData: () => void;
+    fetchData: (filters?: Record<string, any>) => void;
     tipoOptions: { id: number; nome: string; cor: string }[];
     categoriaOptions: { id: number; nome: string; cor: string }[];
 }
 
-const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, categoriaOptions}) => {
-    const [loading, setLoading] = useState<number | null>(null); // Track loading state for each row
+const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, categoriaOptions }) => {
+    const [loading, setLoading] = useState<number | null>(null);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
@@ -33,14 +33,14 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
 
         try {
             await api.put(`/extrato/${id}`, {
-                [field]: value
+                [field]: value,
             });
             fetchData();
             setSnackbarMessage("Alteração salva com sucesso!");
             setSnackbarSeverity("success");
         } catch (error: any) {
             console.error("Erro ao salvar alterações:", error);
-            setSnackbarMessage(error.response.data.message ?? "Erro ao salvar alterações. Tente novamente.");
+            setSnackbarMessage(error.response?.data?.message ?? "Erro ao salvar alterações. Tente novamente.");
             setSnackbarSeverity("error");
         } finally {
             setLoading(null);
@@ -50,7 +50,7 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
 
     const renderSelected = (selected: number, options: { id: number; nome: string; cor: string }[]) => {
         const option = options.find((opt) => opt.id === selected);
-        return option ? option.nome : '';
+        return option ? option.nome : "";
     };
 
     const columns: Column<Transaction>[] = React.useMemo(
@@ -60,7 +60,7 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                 accessor: "data",
                 Cell: ({ value }: any) => {
                     const formattedDate = moment(value).add(3, "hour").utc(true).format("DD/MM/YYYY");
-                    return <span>{formattedDate}</span>; // Retorna um ReactElement
+                    return <span>{formattedDate}</span>;
                 },
             },
             {
@@ -68,7 +68,7 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                 accessor: "valor",
                 Cell: ({ value }: any) => {
                     const formattedValue = formatCurrency(value);
-                    return <span>{formattedValue}</span>; // Retorna um ReactElement
+                    return <span>{formattedValue}</span>;
                 },
             },
             { Header: "Descrição", accessor: "descricao" },
@@ -79,7 +79,6 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                     const { id } = row.original;
                     return (
                         <FormControl fullWidth>
-                            {/* <InputLabel>Categoria</InputLabel> */}
                             <Select
                                 value={row.original.categoria_id || ""}
                                 onChange={(e) => handleChange(id, "categoria_id", Number(e.target.value))}
@@ -87,7 +86,7 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                                 style={{ backgroundColor: row.original.categoria?.cor || "red" }}
                             >
                                 {categoriaOptions.map((categoria) => (
-                                    <MenuItem key={categoria.id} value={categoria.id} >
+                                    <MenuItem key={categoria.id} value={categoria.id}>
                                         {categoria.nome}
                                     </MenuItem>
                                 ))}
@@ -103,7 +102,6 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                     const { id } = row.original;
                     return (
                         <FormControl fullWidth>
-                            {/* <InputLabel>Tipo</InputLabel> */}
                             <Select
                                 value={row.original.tipo_id || ""}
                                 onChange={(e) => handleChange(id, "tipo_id", Number(e.target.value))}
@@ -144,9 +142,9 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                     <TableBody {...getTableBodyProps()}>
                         {rows.map((row) => {
                             prepareRow(row);
-                            const { key, ...rowProps } = row.getRowProps(); // Remover o key de row.getRowProps
+                            const { key, ...rowProps } = row.getRowProps();
                             return (
-                                <TableRow key={row.id} {...rowProps}> {/* Passando o key diretamente */}
+                                <TableRow key={row.id} {...rowProps}>
                                     {row.cells.map((cell) => (
                                         <TableCell {...cell.getCellProps()}>
                                             {loading === row.original.id ? (

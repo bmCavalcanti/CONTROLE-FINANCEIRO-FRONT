@@ -61,7 +61,7 @@ const LiquidityAnalysis: React.FC = () => {
             </Paper>
             <Paper sx={{ padding: 4, marginBottom: 4, boxShadow: 3 }}>
                 <Typography variant="h5" gutterBottom>
-                    Gastos Superfluos
+                    Média de gastos supérfluos no período
                 </Typography>
                 <Box
                     sx={{

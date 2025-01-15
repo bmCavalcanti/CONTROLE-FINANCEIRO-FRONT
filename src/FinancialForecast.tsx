@@ -52,32 +52,26 @@ const FinancialForecast: React.FC = () => {
                         <Typography variant="body1">{formatCurrency(forecastData?.saldoAtual)}</Typography>
                     </Box>
                     <Box flex={1}>
-                        <Typography variant="h6">Saldo Futuro Estimado (Próximos 3 Meses)</Typography>
+                        <Typography variant="h6">Saldo Previsto para { forecastData?.previstoPara }</Typography>
                         <Typography variant="body1">{formatCurrency(forecastData?.saldoFuturoEstimado)}</Typography>
-                    </Box>
-                </Box>
-                <Box mt={3}>
-                    <Typography variant="h6">Gastos Superfluos</Typography>
-                    <Box>
-                        {forecastData?.gastosSuperfluos.map(([categoria, valor]: [string, number]) => (
-                            <Typography key={categoria} variant="body1">
-                                {categoria}: {formatCurrency(valor)}
-                            </Typography>
-                        ))}
                     </Box>
                 </Box>
                 <Box display="flex" flexDirection={{ xs: "column", sm: "row" }} gap={3} mt={3}>
                     <Box flex={1}>
-                        <Typography variant="h6">Total Despesa Fixa</Typography>
-                        <Typography variant="body1">{formatCurrency(forecastData?.totalDespesaFixa)}</Typography>
+                        <Typography variant="h6">Média Despesas</Typography>
+                        <Typography variant="body1">{formatCurrency(forecastData?.mediaDespesas)}</Typography>
                     </Box>
                     <Box flex={1}>
-                        <Typography variant="h6">Total Despesa Variável</Typography>
-                        <Typography variant="body1">{formatCurrency(forecastData?.totalDespesaVariavel)}</Typography>
+                        <Typography variant="h6">Média Despesa Fixa</Typography>
+                        <Typography variant="body1">{formatCurrency(forecastData?.mediaDespesaFixa)}</Typography>
                     </Box>
                     <Box flex={1}>
-                        <Typography variant="h6">Total Despesa Superflua</Typography>
-                        <Typography variant="body1">{formatCurrency(forecastData?.totalDespesaSuperflua)}</Typography>
+                        <Typography variant="h6">Média Despesa Variável</Typography>
+                        <Typography variant="body1">{formatCurrency(forecastData?.mediaDespesaVariavel)}</Typography>
+                    </Box>
+                    <Box flex={1}>
+                        <Typography variant="h6">Média Despesa Superflua</Typography>
+                        <Typography variant="body1">{formatCurrency(forecastData?.mediaDespesaSuperflua)}</Typography>
                     </Box>
                 </Box>
             </Paper>

@@ -7,14 +7,16 @@ import api from "./services/api";
 
 const Transactions: React.FC = () => {
     const [data, setData] = useState([]);
-    const [categoriaOptions, setCategoriaOptions] = useState<{ id: number; nome: string, cor: string }[]>([]);
+    const [categoriaOptions, setCategoriaOptions] = useState<{ id: number; nome: string; cor: string }[]>([]);
     const [tipoOptions, setTipoOptions] = useState<{ id: number; nome: string; cor: string }[]>([]);
+    const [filters, setFilters] = useState({});
     const [loadingInfo, setLoadingInfo] = useState(true);
 
-    const fetchData = async (filters = {}) => {
+    const fetchData = async (newFilters = filters) => {
         try {
-            const response = await api.get("/extrato/list", { params: filters });
+            const response = await api.get("/extrato/list", { params: newFilters });
             setData(response.data.data || []);
+            setFilters(newFilters)
         } catch (error) {
             console.error("Erro ao buscar dados:", error);
         }
@@ -40,7 +42,7 @@ const Transactions: React.FC = () => {
 
     useEffect(() => {
         const fetchDataAsync = async () => {
-            await Promise.all([fetchCategorias(), fetchTipos()]); // Faz as requisições em paralelo
+            await Promise.all([fetchCategorias(), fetchTipos()]);
             setLoadingInfo(false);
         };
         fetchDataAsync();
@@ -53,7 +55,7 @@ const Transactions: React.FC = () => {
                     <CircularProgress />
                 </Paper>
             </Container>
-        )
+        );
     }
 
     return (
@@ -66,7 +68,12 @@ const Transactions: React.FC = () => {
                 <ImportButton onImport={fetchData} />
             </Paper>
             <Paper sx={{ padding: 4, boxShadow: 3 }}>
-                <TableExtract data={data} fetchData={fetchData} categoriaOptions={categoriaOptions} tipoOptions={tipoOptions} />
+                <TableExtract
+                    data={data}
+                    fetchData={() => fetchData(filters)}
+                    categoriaOptions={categoriaOptions}
+                    tipoOptions={tipoOptions}
+                />
             </Paper>
         </Container>
     );
