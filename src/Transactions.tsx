@@ -70,7 +70,6 @@ const Transactions: React.FC = () => {
             <Paper sx={{ padding: 4, boxShadow: 3 }}>
                 <TableExtract
                     data={data}
-                    fetchData={() => fetchData(filters)}
                     categoriaOptions={categoriaOptions}
                     tipoOptions={tipoOptions}
                 />

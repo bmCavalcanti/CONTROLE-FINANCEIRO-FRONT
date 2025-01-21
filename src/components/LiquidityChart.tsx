@@ -22,13 +22,14 @@ ChartJS.register(
 );
 
 interface LiquidityChartProps {
-    evolucao: Record<string, { receitas: number; despesas: number }>;
+    evolucao: Record<string, { receitas: number; despesas: number; saldo: number }>;
 }
 
 const LiquidityChart: React.FC<LiquidityChartProps> = ({ evolucao }) => {
     const labels = Object.keys(evolucao).sort();
     const receitasData = labels.map((key) => evolucao[key].receitas);
     const despesasData = labels.map((key) => evolucao[key].despesas);
+    const saldoData = labels.map((key) => evolucao[key].saldo);
 
     const data = {
         labels,
@@ -45,6 +46,13 @@ const LiquidityChart: React.FC<LiquidityChartProps> = ({ evolucao }) => {
                 data: despesasData,
                 borderColor: "#f44336",
                 backgroundColor: "rgba(244, 67, 54, 0.2)",
+                tension: 0.3,
+            },
+            {
+                label: "Saldo",
+                data: saldoData,
+                borderColor: "#7e651f",
+                backgroundColor: "rgba(244, 193, 54, 0.2)",
                 tension: 0.3,
             },
         ],

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useTable, Column } from "react-table";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Select, MenuItem, FormControl, InputLabel, CircularProgress } from "@mui/material";
 import api from "../services/api";
@@ -17,16 +17,20 @@ interface Transaction {
 
 interface TableProps {
     data: Transaction[];
-    fetchData: (filters?: Record<string, any>) => void;
     tipoOptions: { id: number; nome: string; cor: string }[];
     categoriaOptions: { id: number; nome: string; cor: string }[];
 }
 
-const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, categoriaOptions }) => {
+const TableExtract: React.FC<TableProps> = ({ data, tipoOptions, categoriaOptions }) => {
+    const [tableData, setTableData] = useState<Transaction[]>(data);
     const [loading, setLoading] = useState<number | null>(null);
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
     const [snackbarSeverity, setSnackbarSeverity] = useState<"success" | "error">("success");
+
+    useEffect(() => {
+        setTableData(data);
+    }, [data]);
 
     const handleChange = async (id: number, field: string, value: any) => {
         setLoading(id);
@@ -35,7 +39,13 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
             await api.put(`/extrato/${id}`, {
                 [field]: value,
             });
-            fetchData();
+
+            setTableData((prevData) =>
+                prevData.map((item) =>
+                    item.id === id ? { ...item, [field]: value } : item
+                )
+            );
+
             setSnackbarMessage("Alteração salva com sucesso!");
             setSnackbarSeverity("success");
         } catch (error: any) {
@@ -119,10 +129,10 @@ const TableExtract: React.FC<TableProps> = ({ data, fetchData, tipoOptions, cate
                 },
             },
         ],
-        []
+        [categoriaOptions, tipoOptions]
     );
 
-    const tableInstance = useTable({ columns, data });
+    const tableInstance = useTable({ columns, data: tableData });
 
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = tableInstance;
 
